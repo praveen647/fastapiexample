@@ -16,7 +16,16 @@ app = FastAPI()
 import getpass
 import os
 geminiAPI = os.getenv('GEMINI_API_KEY')
-config = os.getenv('FIREBASE_CONFIG')
+config = {
+    "apiKey": "AIzaSyAXyeap4l3_gNoTFR4-YX3MJH8PE-9Qn1w",
+    "authDomain": "example-fastapi-f5a95.firebaseapp.com",
+    "databaseURL": "https://example-fastapi-f5a95-default-rtdb.firebaseio.com/",
+    "projectId": "example-fastapi-f5a95",
+    "storageBucket": "example-fastapi-f5a95.appspot.com",
+    "messagingSenderId": "1024331035169",
+    "appId": "1:1024331035169:web:42773da2833da4e5a92960",
+    "measurementId": "G-5MV233N64X"
+}
 llm = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-flash')
 firebase = pyrebase.initialize_app(config)
 storage = firebase.storage()
