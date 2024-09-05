@@ -57,11 +57,19 @@ def generate_prompt(query, context):
     {query}
     """
   return prompt
+def put_index(uid,index):
+  db.child("Users").child(uid).child("index").set(index)
 
 def fetch_context(uid):
   context = db.child("Users").child(uid).child("context").get().val()
   return context
-
+def fetch_index(uid):
+    index = db.child("Users").child(uid).child("index").get().val()
+    if index == None:
+        index = 0
+    else:
+        index = int(index)
+    return index
 
 def query_parser(query):
   if '@' in query:
@@ -80,7 +88,7 @@ def generate_response(request:ImageRequest):
     if '@' in query:
         index = query_parser(query)
     else:
-        index = -1
+        index = fetch_index(uid)
     context = fetch_context(uid)
     prompt = generate_prompt(query, context)
     response = requests.get(request.images[index])
@@ -95,5 +103,6 @@ def generate_response(request:ImageRequest):
     )
     response = llm.invoke([message])
     put_context(uid,query,response.content)
+    put_index(uid,index)
     return {"response":response.content}
     
