@@ -73,7 +73,7 @@ def query_parser(query):
 async def root():
     return {"message": "Hello World from Mugundhan"}
 
-@app.get("/generate")
+@app.post("/generate")
 def generate_response(request:ImageRequest):
     uid = request.id
     query = request.query
