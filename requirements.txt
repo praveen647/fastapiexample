@@ -16,3 +16,4 @@ numpy
 pandas
 jupyter_ai
 google-generativeai
+pyrebase4
