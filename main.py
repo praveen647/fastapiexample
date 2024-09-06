@@ -37,13 +37,27 @@ class ImageRequest(BaseModel):
     query: str
     images: List[str]
 
+def check_query(query):
+  output = llm2.invoke(
+    [
+        SystemMessage(content = f"""You are a system that determines if a given query is referring to an uploaded image or if it is a standalone query. Your task is to analyze the query and respond with either "yes" or "no" based on the following conditions:
+
+                                    Yes: If the query is referring to or asking about the uploaded image.
+                                    No: If the query is a standalone, unrelated question.
+                                    Respond with only "yes" or "no"."""),
+        HumanMessage(content = f"""{query}""")
+    ])
+  if output.content == "yes":
+    return True
+  else:
+    return False
 def extract_title_and_questions(input_string):
     title_match = re.search(r"Title\s*:\s*(.*)", input_string)
     title = title_match.group(1).strip() if title_match else None
     questions = re.findall(r"\d+\.\s*(.*)", input_string)
 
     return title, questions
-def generate_response(query):
+def generate_answer(query):
     output = llm2.invoke(
     [
         SystemMessage(content = f"""Your an intelligent chatbot. Give response in conversational way"""),
@@ -133,7 +147,7 @@ def generate_response(request:ImageRequest):
         )
         response = llm1.invoke([message])
     else:
-        response = generate_response(query)
+        response = generate_answer(query)
     title,questions=generate_questions(response.content)
     put_context(uid,query,response.content)
     put_index(uid,index)
