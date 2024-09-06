@@ -4,6 +4,7 @@ from fastapi import FastAPI
 import pyrebase
 from urllib.parse import urldefrag
 import requests
+import re
 from PIL import Image
 from io import BytesIO
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
