@@ -59,7 +59,7 @@ def extract_title_and_questions(input_string):
     return title, questions
 def generate_answer(query):
     output = llm2.invoke([
-            SystemMessage(content = f"""Give response in conversational way"""),
+            SystemMessage(content = f"""Give response in conversational way.If anyone asks something related to you say "Am a Image Recognizing Conversational ChatBot my name is DrowserPandi" """),
             HumanMessage(content = f"""{query}""")
         ])
     return output
