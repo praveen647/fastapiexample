@@ -17,16 +17,17 @@ import getpass
 import os
 geminiAPI = os.getenv('GEMINI_API_KEY')
 config = {
-    "apiKey": "AIzaSyAXyeap4l3_gNoTFR4-YX3MJH8PE-9Qn1w",
-    "authDomain": "example-fastapi-f5a95.firebaseapp.com",
-    "databaseURL": "https://example-fastapi-f5a95-default-rtdb.firebaseio.com/",
-    "projectId": "example-fastapi-f5a95",
-    "storageBucket": "example-fastapi-f5a95.appspot.com",
-    "messagingSenderId": "1024331035169",
-    "appId": "1:1024331035169:web:42773da2833da4e5a92960",
-    "measurementId": "G-5MV233N64X"
+    "apiKey": os.getenv('FIREBASE_API'),
+    "authDomain": os.getenv('FIREBASE_AUTH'),
+    "databaseURL": os.getenv('DB_URL),
+    "projectId": os.getenv('FIREBASE_ID'),
+    "storageBucket": os.getenv('STORAGE_BUCKET'),
+    "messagingSenderId": os.getenv('MESSAGING_ID'),
+    "appId": os.getenv('APP_ID'),
+    "measurementId": os.getenv('MEASUREMENT_ID')
 }
-llm = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-flash')
+llm1 = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-flash')
+llm2 = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-pro', convert_system_message_to_human = True)
 firebase = pyrebase.initialize_app(config)
 storage = firebase.storage()
 db = firebase.database()
@@ -34,6 +35,24 @@ class ImageRequest(BaseModel):
     id : str
     query: str
     images: List[str]
+
+def extract_title_and_questions(input_string):
+    title_match = re.search(r"Title\s*:\s*(.*)", input_string)
+    title = title_match.group(1).strip() if title_match else None
+    questions = re.findall(r"\d+\.\s*(.*)", input_string)
+
+    return title, questions
+
+def generate_questions(response):
+    output = llm.invoke(
+    [
+        SystemMessage(content = f"""Given a query generate a title and a list of questions related to the query. The expected output format is:
+                                    Title : <generated title>
+                                    Questions : [<generated questions1>,<generated questions2>,<generated questions3>...]"""),
+        HumanMessage(content = f"""{response}""")
+    ])
+    title, questions = extract_title_and_questions(output.content)
+    return title,questions
 def put_context(uid,query,response):
   context = fetch_context(uid)
   if context is None:
@@ -104,7 +123,8 @@ def generate_response(request:ImageRequest):
         ]
     )
     response = llm.invoke([message])
+    title,questions=generate_questions(response.content)
     put_context(uid,query,response.content)
     put_index(uid,index)
-    return {"response":response.content}
+    return {"title":title,"questions":questions:"response":response.content}
     
