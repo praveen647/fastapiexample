@@ -93,6 +93,8 @@ def generate_response(request:ImageRequest):
     prompt = generate_prompt(query, context)
     response = requests.get(request.images[index])
     image = Image.open(BytesIO(response.content))
+    if image.mode in ('RGBA', 'LA'):
+        image = image.convert('RGB')
     path = "download123.jpg"
     image.save(path)
     message = HumanMessage(
