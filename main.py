@@ -44,7 +44,7 @@ def extract_title_and_questions(input_string):
     return title, questions
 
 def generate_questions(response):
-    output = llm.invoke(
+    output = llm2.invoke(
     [
         SystemMessage(content = f"""Given a query generate a title and a list of questions related to the query. The expected output format is:
                                     Title : <generated title>
@@ -122,7 +122,7 @@ def generate_response(request:ImageRequest):
             {'type': 'image_url', 'image_url': path}
         ]
     )
-    response = llm.invoke([message])
+    response = llm1.invoke([message])
     title,questions=generate_questions(response.content)
     put_context(uid,query,response.content)
     put_index(uid,index)
