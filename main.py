@@ -62,7 +62,7 @@ def generate_answer(query):
             SystemMessage(content = f"""Your an intelligent chatbot. Give response in conversational way"""),
             HumanMessage(content = f"""{query}""")
         ])
-    return output.content
+    return output
 def generate_questions(response):
     output = llm2.invoke(
     [
