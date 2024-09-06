@@ -43,7 +43,13 @@ def extract_title_and_questions(input_string):
     questions = re.findall(r"\d+\.\s*(.*)", input_string)
 
     return title, questions
-
+def generate_response(query):
+    output = llm2.invoke(
+    [
+        SystemMessage(content = f"""Your an intelligent chatbot. Give response in conversational way"""),
+        HumanMessage(content = f"""{query}""")
+    ])
+   return output.content
 def generate_questions(response):
     output = llm2.invoke(
     [
@@ -105,25 +111,29 @@ async def root():
 def generate_response(request:ImageRequest):
     uid = request.id
     query = request.query
-    if '@' in query:
-        index = query_parser(query)
+    flag = check_query(query)
+    if flag:
+        if '@' in query:
+            index = query_parser(query)
+        else:
+            index = fetch_index(uid)
+        context = fetch_context(uid)
+        prompt = generate_prompt(query, context)
+        response = requests.get(request.images[index])
+        image = Image.open(BytesIO(response.content))
+        if image.mode in ('RGBA', 'LA'):
+            image = image.convert('RGB')
+        path = "download123.jpg"
+        image.save(path)
+        message = HumanMessage(
+            content = [
+                {'type': 'text', 'text': prompt},
+                {'type': 'image_url', 'image_url': path}
+            ]
+        )
+        response = llm1.invoke([message])
     else:
-        index = fetch_index(uid)
-    context = fetch_context(uid)
-    prompt = generate_prompt(query, context)
-    response = requests.get(request.images[index])
-    image = Image.open(BytesIO(response.content))
-    if image.mode in ('RGBA', 'LA'):
-        image = image.convert('RGB')
-    path = "download123.jpg"
-    image.save(path)
-    message = HumanMessage(
-        content = [
-            {'type': 'text', 'text': prompt},
-            {'type': 'image_url', 'image_url': path}
-        ]
-    )
-    response = llm1.invoke([message])
+        response = generate_response(query)
     title,questions=generate_questions(response.content)
     put_context(uid,query,response.content)
     put_index(uid,index)
