@@ -40,9 +40,9 @@ class ImageRequest(BaseModel):
 def check_query(query):
   output = llm2.invoke(
     [
-        SystemMessage(content = f"""You are a system that determines if a given query is referring to an uploaded image or if it is a standalone query. Your task is to analyze the query and respond with either "yes" or "no" based on the following conditions:
+        SystemMessage(content = f"""You are a system that determines if a given query is referring to an uploaded image and any other image or if it is a standalone query. Your task is to analyze the query and respond with either "yes" or "no" based on the following conditions:
 
-                                    Yes: If the query is referring to or asking about the uploaded image.
+                                    Yes: If the query is referring to or asking about the uploaded image or any other image.
                                     No: If the query is a standalone, unrelated question.
                                     Respond with only "yes" or "no"."""),
         HumanMessage(content = f"""{query}""")
