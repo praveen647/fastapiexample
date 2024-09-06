@@ -125,6 +125,7 @@ def generate_response(request:ImageRequest):
     uid = request.id
     query = request.query
     flag = check_query(query)
+    index = 0
     if flag:
         if '@' in query:
             index = query_parser(query)
