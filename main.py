@@ -92,7 +92,7 @@ def generate_prompt(query, context):
     Given the information of the all the previous conversation below:
     {context_str}
     _________________________________________________________________
-    Answer the following query:
+    Answer the following query in a conversational way:
     {query}
     """
   return prompt
