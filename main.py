@@ -19,7 +19,7 @@ geminiAPI = os.getenv('GEMINI_API_KEY')
 config = {
     "apiKey": os.getenv('FIREBASE_API'),
     "authDomain": os.getenv('FIREBASE_AUTH'),
-    "databaseURL": os.getenv('DB_URL),
+    "databaseURL": os.getenv('DB_URL'),
     "projectId": os.getenv('FIREBASE_ID'),
     "storageBucket": os.getenv('STORAGE_BUCKET'),
     "messagingSenderId": os.getenv('MESSAGING_ID'),
