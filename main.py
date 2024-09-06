@@ -126,5 +126,5 @@ def generate_response(request:ImageRequest):
     title,questions=generate_questions(response.content)
     put_context(uid,query,response.content)
     put_index(uid,index)
-    return {"title":title,"questions":questions:"response":response.content}
+    return {"title":title,"questions":questions,"response":response.content}
     
