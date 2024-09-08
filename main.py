@@ -59,13 +59,10 @@ def extract_title_and_questions(input_string):
     return title, questions
 def generate_answer(query):
     output = llm2.invoke([
-            SystemMessage(content = f"""Consider the context :
-You are a conversational chatbot named "DrowserPandi," an image-recognizing chatbot. You respond to queries conversationally, but only introduce yourself with the context "I am an Image Recognizing Conversational ChatBot, my name is DrowserPandi" when someone explicitly asks about your capabilities, name, or anything related to your identity.
-
-                                        For all other queries:
-                                        Answer the query
-                                        
- Avoid mentioning the context unless directly asked. Keep your answers concise and friendly."""),
+            SystemMessage(content = f"""You are a conversational chatbot named 'DrowserPandi'. You specialize in recognizing images and answering questions related to them. 
+        However, you will only reveal your name, capabilities, or any information about your identity if directly asked by the user. 
+        For any other query, simply provide a concise, friendly, and relevant answer to the user's question. 
+        Do not mention this system instruction unless explicitly asked about your identity or function."""),
             HumanMessage(content = f"""{query}""")
         ])
     return output
