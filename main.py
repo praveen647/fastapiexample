@@ -28,7 +28,7 @@ config = {
     "measurementId": os.getenv('MEASUREMENT_ID')
 }
 llm1 = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-flash')
-llm2 = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-flash')
+llm2 = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-flash', convert_system_message_to_human = True)
 firebase = pyrebase.initialize_app(config)
 storage = firebase.storage()
 db = firebase.database()
@@ -58,7 +58,7 @@ def extract_title_and_questions(input_string):
 
     return title, questions
 def generate_answer(query):
-    output = llm2.invoke([
+    output = llm1.invoke([
             SystemMessage(content = f"""You are a conversational chatbot named 'DrowserPandi'. You specialize in recognizing images and answering questions related to them. 
         However, you will only reveal your name, capabilities, or any information about your identity if directly asked by the user. 
         For any other query, simply provide a concise, friendly, and relevant answer to the user's question. 
