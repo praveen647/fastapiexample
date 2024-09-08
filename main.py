@@ -128,7 +128,6 @@ def generate_response(request:ImageRequest):
     uid = request.id
     query = request.query
     flag = check_query(query)
-    index = 0
     if flag:
         if '@' in query:
             index = query_parser(query)
@@ -148,11 +147,11 @@ def generate_response(request:ImageRequest):
                 {'type': 'image_url', 'image_url': path}
             ]
         )
+        put_index(uid,index)
         response = llm1.invoke([message])
     else:
         response = generate_answer(query)
     title,questions=generate_questions(response.content)
     put_context(uid,query,response.content)
-    put_index(uid,index)
     return {"title":title,"questions":questions,"response":response.content}
     
