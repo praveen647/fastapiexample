@@ -28,7 +28,7 @@ config = {
     "measurementId": os.getenv('MEASUREMENT_ID')
 }
 llm1 = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-flash')
-llm2 = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-pro')
+llm2 = ChatGoogleGenerativeAI(api_key = geminiAPI, model = 'gemini-1.5-flash')
 firebase = pyrebase.initialize_app(config)
 storage = firebase.storage()
 db = firebase.database()
