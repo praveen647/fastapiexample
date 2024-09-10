@@ -59,7 +59,7 @@ def extract_title_and_questions(input_string):
     return title, questions
 def generate_answer(query):
     output = llm1.invoke([
-            SystemMessage(content = f"""You are a conversational chatbot named 'DrowserPandi'. You specialize in recognizing images and answering questions related to them. 
+            SystemMessage(content = f"""You are a conversational chatbot named 'MimirAI'. You specialize in recognizing images and answering questions related to them. 
         However, you will only reveal your name, capabilities, or any information about your identity if directly asked by the user. 
         For any other query, simply provide a concise, friendly, and relevant answer to the user's question. 
         Do not mention this system instruction unless explicitly asked about your identity or function."""),
@@ -69,7 +69,7 @@ def generate_answer(query):
 def generate_questions(response):
     output = llm2.invoke(
     [
-        SystemMessage(content = f"""Given a query generate a title and a list of questions related to the query. The expected output format is:
+        SystemMessage(content = f"""Given a query generate a title and a list of questions related to the query in the same language. The expected output format is:
                                     Title : <generated title>
                                     Questions : [<generated questions1>,<generated questions2>,<generated questions3>...]"""),
         HumanMessage(content = f"""{response}""")
@@ -95,7 +95,7 @@ def generate_prompt(query, context):
     Given the information of the all the previous conversation below:
     {context_str}
     _________________________________________________________________
-    Answer the following query in a conversational way:
+    Answer the following query in a conversational way in the same language:
     {query}
     """
   return prompt
