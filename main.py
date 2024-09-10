@@ -141,8 +141,9 @@ def fetch_index(uid):
 def query_parser(query):
     try:
         if '@' in query:
-            index = int(query.split('@')[1][-1])
-        return index
+            part = query.split('@', 1)[1]  
+            index = ''.join(filter(str.isdigit, part.split()[0]))
+            return int(index)
     except Exception as e:
         raise Exception(f"Query Parsing Error: {str(e)}")
 
