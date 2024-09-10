@@ -179,7 +179,9 @@ def generate_response(request: ImageRequest):
             put_index(uid, index)
             response = llm1.invoke([message])
         else:
-            response = generate_answer(query)
+            context = fetch_context(uid)
+            prompt = generate_prompt(query,context)
+            response = generate_answer(prompt)
 
         title, questions = generate_questions(response.content)
         put_context(uid, query, response.content)
