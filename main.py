@@ -143,7 +143,7 @@ def query_parser(query):
         if '@' in query:
             part = query.split('@', 1)[1]  
             index = ''.join(filter(str.isdigit, part.split()[0]))
-            return int(index)-1
+            return int(index)
     except Exception as e:
         raise Exception(f"Query Parsing Error: {str(e)}")
 
@@ -184,8 +184,6 @@ def generate_response(request: ImageRequest):
             response = generate_answer(prompt)
 
         title, questions = generate_questions(response.content)
-        if title==null:
-            title=""
         put_context(uid, query, response.content)
         return {"title": title, "questions": questions, "response": response.content}
     
