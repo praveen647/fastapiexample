@@ -85,6 +85,7 @@ def generate_questions(response):
             HumanMessage(content=f"""{response}""")
         ])
         title, questions = extract_title_and_questions(output.content)
+        title = title if title else ""
         return title, questions
     except Exception as e:
         raise Exception(f"Question Generation Error: {str(e)}")
