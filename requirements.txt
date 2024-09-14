@@ -18,3 +18,11 @@ jupyter_ai
 google-generativeai
 pyrebase4
 firebase-admin
+bycrypt
+python-multipart
+passlib
+python-jose
+pydantic
+
+
+
