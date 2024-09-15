@@ -20,11 +20,6 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import os
 
-cred = credentials.Certificate('services.json')
-firebase_admin.initialize_app(cred)
-db = firestore.client()
-collection_name = os.getenv('COLLECTION_NAME')
-doc_ref = db.collection(collection_name)
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = "HS256"
@@ -86,7 +81,7 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 def get_user(db, username: str):
-    user = doc_ref.document(username).get().to_dict()
+    user = db.child("Users").child(username).get().val()
     return user
 
 
