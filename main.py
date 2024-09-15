@@ -33,7 +33,7 @@ services = {
   "client_x509_cert_url": os.getenv('FS_CLIENTCERT'),
   "universe_domain":os.getenv('FS_UNIVERSEDOMAIN')
 }
-cred = credentials.Certificate(services)
+cred = credentials.Certificate('services.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 collection_name = os.getenv('COLLECTION_NAME')
