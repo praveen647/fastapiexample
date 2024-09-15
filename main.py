@@ -129,7 +129,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 async def get_current_active_user(current_user: UserInDB = Depends(get_current_user)):
-    if current_user.disabled:
+    if current_user['disabled']:
         raise HTTPException(status_code=400, detail="Inactive user")
 
     return current_user
@@ -263,7 +263,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.post("/generate")
-def generate_response(request: ImageRequest):
+def generate_response(request: ImageRequest, current_user: UserInDB = Depends(get_current_active_user)):
     try:
         uid = request.id
         query = request.query
