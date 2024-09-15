@@ -20,19 +20,6 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import os
 
-services = {
-  "type": os.getenv('FS_TYPE'),
-  "project_id": os.getenv('FS_PROJECTID') ,
-  "private_key_id": os.getenv('FS_PRIVATEKEYID'),
-  "private_key": os.getenv('FS_PRIVATEKEY'),
-  "client_email": os.getenv('FS_CLIENTEMAIL'),
-  "client_id": os.getenv('FS_CLIENTEMAILID'),
-  "auth_uri": os.getenv('FS_AUTHURI'),
-  "token_uri": os.getenv('FS_TOKENURI'),
-  "auth_provider_x509_cert_url": os.getenv('FS_AUTHPROVIDE'),
-  "client_x509_cert_url": os.getenv('FS_CLIENTCERT'),
-  "universe_domain":os.getenv('FS_UNIVERSEDOMAIN')
-}
 cred = credentials.Certificate('services.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
