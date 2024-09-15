@@ -18,6 +18,7 @@ from passlib.context import CryptContext
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+import os
 
 
 cred = credentials.Certificate(os.getenv('SERVICES'))
@@ -55,7 +56,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app = FastAPI()
 
-import os
 geminiAPI = os.getenv('GEMINI_API_KEY')
 config = {
     "apiKey": os.getenv('FIREBASE_API'),
