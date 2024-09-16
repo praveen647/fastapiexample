@@ -64,7 +64,6 @@ config = {
 
 try:
     llm1 = ChatGoogleGenerativeAI(api_key=geminiAPI, model='gemini-1.5-flash')
-    llm2 = ChatGoogleGenerativeAI(api_key=geminiAPI, model='gemini-pro', convert_system_message_to_human=True)
     firebase = pyrebase.initialize_app(config)
     storage = firebase.storage()
     db = firebase.database()
@@ -141,7 +140,7 @@ class ImageRequest(BaseModel):
 
 def check_query(query):
     try:
-        output = llm2.invoke([
+        output = llm1.invoke([
             SystemMessage(content=f"""You are a system that determines if a given query is referring to an uploaded image and any other image or if it is a standalone query. Your task is to analyze the query and respond with either "yes" or "no" based on the following conditions:
 
                                     Yes: If the query is referring to or asking about the uploaded image or any other image.
@@ -149,7 +148,7 @@ def check_query(query):
                                     Respond with only "yes" or "no"."""),
             HumanMessage(content=f"""{query}""")
         ])
-        return output.content == "yes"
+        return "yes" == output.content.strip().lower()
     except Exception as e:
         raise Exception(f"Query Check Error: {str(e)}")
 
@@ -177,7 +176,7 @@ def generate_answer(query):
 
 def generate_questions(response):
     try:
-        output = llm2.invoke([
+        output = llm1.invoke([
             SystemMessage(content=f"""Given a query generate a title and a list of questions related to the query in the same language. The expected output format is:
                                         Title : <generated title>
                                         Questions : [<generated questions1>,<generated questions2>,<generated questions3>...]"""),
