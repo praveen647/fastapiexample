@@ -156,7 +156,9 @@ def extract_title_and_questions(input_string):
     try:
         title_match = re.search(r"Title\s*:\s*(.*)", input_string)
         title = title_match.group(1).strip() if title_match else None
-        questions = re.findall(r"\d+\.\s*(.*)", input_string)
+        questions = re.findall(r"[-\d]+\.\s*(.*)|-\s*(.*)", input_string)
+        questions = [q1 or q2 for q1, q2 in questions if q1 or q2]
+        
         return title, questions
     except Exception as e:
         raise Exception(f"Extraction Error: {str(e)}")
